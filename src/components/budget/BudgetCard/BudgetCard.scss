@@ -1,0 +1,93 @@
+.budget-card {
+  @include flex-column;
+  gap: $spacing-lg;
+  animation: slideInUp $transition-base ease-out;
+
+  &__header {
+    @include flex-between;
+    gap: $spacing-md;
+  }
+
+  &__title {
+    @include heading-4;
+    margin: 0;
+  }
+
+  &__count {
+    @include caption;
+    color: $color-text-tertiary;
+    background: $color-neutral-100;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-md;
+  }
+
+  &__balance {
+    @include flex-column;
+    gap: $spacing-xs;
+    padding: $spacing-lg;
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+    border-radius: $radius-lg;
+    color: $color-white;
+  }
+
+  &__balance-label {
+    @include caption;
+    color: rgba($color-white, 0.8);
+  }
+
+  &__balance-amount {
+    @include heading-2;
+    
+    &.positive {
+      color: $color-white;
+    }
+
+    &.negative {
+      color: rgba($color-danger-light, 1);
+    }
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+  }
+
+  &__stat {
+    @include flex-center;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    background: $color-neutral-50;
+    border-radius: $radius-md;
+
+    &--income {
+      border-left: 3px solid $color-success;
+    }
+
+    &--expense {
+      border-left: 3px solid $color-danger;
+    }
+  }
+
+  &__stat-icon {
+    font-size: $font-size-2xl;
+    line-height: 1;
+  }
+
+  &__stat-content {
+    @include flex-column;
+    gap: $spacing-xs;
+    flex: 1;
+  }
+
+  &__stat-label {
+    @include caption;
+    color: $color-text-tertiary;
+  }
+
+  &__stat-value {
+    @include body-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+}

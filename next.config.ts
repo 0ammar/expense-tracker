@@ -1,8 +1,19 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
+  sassOptions: {
+    includePaths: ['./src/styles'],
+    prependData: `
+      @import "variables";
+      @import "mixins";
+      @import "effects";
+    `,
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

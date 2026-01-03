@@ -1,0 +1,32 @@
+.edit-transaction-modal {
+  @include flex-column;
+  gap: $spacing-xl;
+
+  &__fields {
+    @include flex-column;
+    gap: $spacing-lg;
+  }
+
+  &__textarea-wrapper {
+    @include flex-column;
+    gap: $spacing-xs;
+  }
+
+  &__label {
+    @include body-small;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  &__textarea {
+    @include input-base;
+    resize: vertical;
+    font-family: $font-primary;
+  }
+
+  &__actions {
+    @include flex-center;
+    gap: $spacing-md;
+    justify-content: flex-end;
+  }
+}

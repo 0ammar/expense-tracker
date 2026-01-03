@@ -1,0 +1,78 @@
+.header {
+  background: $color-surface;
+  border-bottom: 1px solid $color-border-primary;
+  box-shadow: $shadow-sm;
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+
+  &__container {
+    @include flex-between;
+    height: $header-height;
+  }
+
+  &__logo {
+    @include heading-3;
+    color: $color-primary;
+    font-weight: $font-weight-extrabold;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary-dark;
+    }
+  }
+
+  &__actions {
+    @include flex-center;
+    gap: $spacing-lg;
+  }
+
+  &__link {
+    @include body-base;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+    text-decoration: none;
+    transition: color $transition-fast;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-md;
+
+    &:hover {
+      color: $color-primary;
+      background: $color-neutral-50;
+    }
+  }
+
+  &__user {
+    @include flex-center;
+    gap: $spacing-md;
+  }
+
+  &__user-name {
+    @include body-small;
+    color: $color-text-primary;
+    font-weight: $font-weight-medium;
+
+    @media (max-width: $breakpoint-sm) {
+      display: none;
+    }
+  }
+
+  &__sign-out {
+    @include body-small;
+    padding: $spacing-sm $spacing-md;
+    background: transparent;
+    border: 1px solid $color-border-primary;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: $color-danger;
+      color: $color-white;
+      border-color: $color-danger;
+    }
+  }
+}

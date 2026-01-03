@@ -1,0 +1,31 @@
+.delete-budget-modal {
+  @include flex-column;
+  gap: $spacing-xl;
+
+  &__message {
+    @include body-base;
+    color: $color-text-primary;
+    margin: 0;
+
+    strong {
+      color: $color-danger;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__warning {
+    @include body-small;
+    color: $color-text-secondary;
+    padding: $spacing-md;
+    background: rgba($color-warning, 0.1);
+    border-left: 3px solid $color-warning;
+    border-radius: $radius-md;
+    margin: 0;
+  }
+
+  &__actions {
+    @include flex-center;
+    gap: $spacing-md;
+    justify-content: flex-end;
+  }
+}

@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+  image         String?
+  budgets       Budget[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([email])
+}
+
+model Budget {
+  id           String        @id @default(cuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  year         Int
+  month        Int
+  isArchived   Boolean       @default(false)
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@unique([userId, year, month])
+  @@index([userId, isArchived])
+  @@index([userId, createdAt])
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  budgetId    String
+  budget      Budget          @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  name        String
+  amount      Decimal         @db.Decimal(10, 3)
+  description String?
+  date        DateTime
+  category    String
+  type        TransactionType
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([budgetId, type])
+  @@index([budgetId, category])
+  @@index([budgetId, date])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}

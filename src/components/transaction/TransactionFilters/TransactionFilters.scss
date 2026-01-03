@@ -1,0 +1,28 @@
+.transaction-filters {
+  @include flex-center;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  border: 1px solid $color-border-primary;
+  flex-wrap: wrap;
+
+  &__search {
+    position: relative;
+    flex: 1;
+    min-width: 250px;
+  }
+
+  &__search-icon {
+    position: absolute;
+    left: $spacing-md;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $color-text-tertiary;
+  }
+
+  &__search-input {
+    @include input-base;
+    padding-left: $spacing-3xl;
+  }
+}

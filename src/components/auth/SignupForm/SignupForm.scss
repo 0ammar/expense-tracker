@@ -1,0 +1,59 @@
+.signup-form {
+  width: 100%;
+  max-width: 450px;
+  @include flex-column;
+  gap: $spacing-xl;
+
+  &__header {
+    @include flex-column;
+    gap: $spacing-sm;
+    text-align: center;
+  }
+
+  &__title {
+    @include heading-2;
+  }
+
+  &__subtitle {
+    @include body-base;
+    color: $color-text-secondary;
+  }
+
+  &__error {
+    padding: $spacing-md;
+    background: rgba($color-danger, 0.1);
+    border: 1px solid $color-danger;
+    border-radius: $radius-md;
+    color: $color-danger;
+    @include body-small;
+    text-align: center;
+    animation: slideInDown $transition-base ease-out;
+  }
+
+  &__fields {
+    @include flex-column;
+    gap: $spacing-lg;
+  }
+
+  &__submit {
+    width: 100%;
+  }
+
+  &__footer {
+    @include body-small;
+    text-align: center;
+    color: $color-text-secondary;
+  }
+
+  &__link {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary-dark;
+      text-decoration: underline;
+    }
+  }
+}

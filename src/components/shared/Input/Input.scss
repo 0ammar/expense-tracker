@@ -1,0 +1,40 @@
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &--full {
+    width: 100%;
+  }
+
+  &__label {
+    @include body-small;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  &__error {
+    @include caption;
+    color: $color-danger;
+    text-transform: none;
+  }
+
+  &__helper {
+    @include caption;
+    color: $color-text-tertiary;
+    text-transform: none;
+  }
+}
+
+.input {
+  @include input-base;
+
+  &--error {
+    border-color: $color-danger;
+
+    &:focus {
+      border-color: $color-danger;
+      box-shadow: 0 0 0 3px rgba($color-danger, 0.1);
+    }
+  }
+}

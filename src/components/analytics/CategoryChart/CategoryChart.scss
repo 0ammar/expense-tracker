@@ -1,0 +1,64 @@
+.category-chart {
+  @include flex-column;
+  gap: $spacing-xl;
+
+  &__title {
+    @include heading-4;
+    margin: 0;
+  }
+
+  &__empty {
+    @include body-base;
+    color: $color-text-secondary;
+    text-align: center;
+    padding: $spacing-2xl;
+  }
+
+  &__container {
+    width: 100%;
+    min-height: 300px;
+  }
+
+  &__legend {
+    @include flex-column;
+    gap: $spacing-sm;
+    padding-top: $spacing-lg;
+    border-top: 1px solid $color-border-primary;
+  }
+
+  &__legend-item {
+    @include flex-center;
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+    border-radius: $radius-md;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: $color-neutral-50;
+    }
+  }
+
+  &__legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: $radius-sm;
+    flex-shrink: 0;
+  }
+
+  &__legend-icon {
+    font-size: $font-size-lg;
+    flex-shrink: 0;
+  }
+
+  &__legend-name {
+    @include body-small;
+    flex: 1;
+    font-weight: $font-weight-medium;
+  }
+
+  &__legend-value {
+    @include body-small;
+    color: $color-text-secondary;
+    font-variant-numeric: tabular-nums;
+  }
+}

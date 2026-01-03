@@ -1,0 +1,63 @@
+.summary-card {
+  @include flex-column;
+  gap: $spacing-md;
+  position: relative;
+  overflow: hidden;
+  transition: all $transition-base;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    transition: width $transition-base;
+  }
+
+  &:hover::before {
+    width: 8px;
+  }
+
+  &--success::before {
+    background: $color-success;
+  }
+
+  &--danger::before {
+    background: $color-danger;
+  }
+
+  &--warning::before {
+    background: $color-warning;
+  }
+
+  &--info::before {
+    background: $color-primary;
+  }
+
+  &__header {
+    @include flex-center;
+    gap: $spacing-sm;
+    justify-content: flex-start;
+  }
+
+  &__icon {
+    font-size: $font-size-2xl;
+    line-height: 1;
+  }
+
+  &__title {
+    @include body-small;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__value {
+    @include heading-2;
+    margin: 0;
+    padding-left: $spacing-sm;
+  }
+}

@@ -1,0 +1,14 @@
+.auth-page {
+  @include flex-column-center;
+  min-height: 100vh;
+  padding: $spacing-xl;
+}
+
+.dashboard-layout {
+  min-height: 100vh;
+  background: $color-bg-secondary;
+
+  &__main {
+    min-height: calc(100vh - #{$header-height});
+  }
+}

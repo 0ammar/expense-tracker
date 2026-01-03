@@ -1,0 +1,137 @@
+.transaction-item {
+  @include flex-center;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  border: 1px solid $color-border-primary;
+  transition: all $transition-base;
+  animation: slideInUp $transition-base ease-out;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    border-color: $color-border-secondary;
+  }
+
+  &--income {
+    border-left: 4px solid $color-success;
+  }
+
+  &--expense {
+    border-left: 4px solid $color-danger;
+  }
+
+  &__icon {
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    background: $color-neutral-50;
+    border-radius: $radius-md;
+    font-size: $font-size-2xl;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex: 1;
+    @include flex-column;
+    gap: $spacing-xs;
+    min-width: 0;
+  }
+
+  &__main {
+    @include flex-column;
+    gap: $spacing-xs;
+  }
+
+  &__name {
+    @include body-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+    @include truncate;
+  }
+
+  &__description {
+    @include body-small;
+    color: $color-text-secondary;
+    margin: 0;
+    @include line-clamp(2);
+  }
+
+  &__meta {
+    @include flex-center;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+  }
+
+  &__category {
+    @include caption;
+    background: $color-neutral-100;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-sm;
+  }
+
+  &__date {
+    @include caption;
+    color: $color-text-tertiary;
+  }
+
+  &__right {
+    @include flex-column;
+    align-items: flex-end;
+    gap: $spacing-sm;
+  }
+
+  &__amount {
+    @include heading-4;
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+
+    &--income {
+      color: $color-success;
+    }
+
+    &--expense {
+      color: $color-danger;
+    }
+  }
+
+  &__actions {
+    @include flex-center;
+    gap: $spacing-xs;
+  }
+
+  &__action {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-fast;
+    font-size: $font-size-base;
+
+    &:hover {
+      background: $color-neutral-100;
+      transform: scale(1.1);
+    }
+
+    &--delete:hover {
+      background: rgba($color-danger, 0.1);
+    }
+  }
+
+  @include respond-to(md) {
+    &__content {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__meta {
+      flex-wrap: nowrap;
+    }
+  }
+}

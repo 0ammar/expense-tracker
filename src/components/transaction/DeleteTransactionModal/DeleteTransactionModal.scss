@@ -1,0 +1,20 @@
+.delete-transaction-modal {
+  @include flex-column;
+  gap: $spacing-xl;
+
+  &__message {
+    @include body-base;
+    margin: 0;
+
+    strong {
+      color: $color-danger;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__actions {
+    @include flex-center;
+    gap: $spacing-md;
+    justify-content: flex-end;
+  }
+}

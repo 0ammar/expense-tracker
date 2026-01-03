@@ -1,0 +1,45 @@
+.loading-spinner-wrapper {
+  @include flex-column-center;
+  gap: $spacing-md;
+  width: 100%;
+  padding: $spacing-xl;
+}
+
+.loading-spinner {
+  border-radius: $radius-full;
+  border-style: solid;
+  animation: spin 0.8s linear infinite;
+
+  &--sm {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+  }
+
+  &--md {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+  }
+
+  &--lg {
+    width: 60px;
+    height: 60px;
+    border-width: 4px;
+  }
+
+  &--primary {
+    border-color: $color-neutral-200;
+    border-top-color: $color-primary;
+  }
+
+  &--white {
+    border-color: rgba($color-white, 0.3);
+    border-top-color: $color-white;
+  }
+
+  &__text {
+    @include body-small;
+    color: $color-text-secondary;
+  }
+}

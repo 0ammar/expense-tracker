@@ -1,0 +1,72 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($color-black, 0.5);
+  @include flex-center;
+  z-index: $z-modal-backdrop;
+  padding: $spacing-lg;
+  animation: modalBackdropIn $transition-fast forwards;
+}
+
+.modal {
+  background: $color-surface;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-2xl;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modalContentIn $transition-base ease-out forwards;
+  width: 100%;
+
+  &--sm {
+    max-width: 400px;
+  }
+
+  &--md {
+    max-width: 600px;
+  }
+
+  &--lg {
+    max-width: 800px;
+  }
+
+  &__header {
+    @include flex-between;
+    padding: $spacing-lg;
+    border-bottom: 1px solid $color-border-primary;
+  }
+
+  &__title {
+    @include heading-3;
+    margin: 0;
+  }
+
+  &__close {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    cursor: pointer;
+    transition: all $transition-fast;
+    font-size: $font-size-xl;
+
+    &:hover {
+      background: $color-neutral-100;
+      color: $color-text-primary;
+    }
+  }
+
+  &__content {
+    padding: $spacing-lg;
+    overflow-y: auto;
+    @include scrollbar-custom;
+  }
+}
