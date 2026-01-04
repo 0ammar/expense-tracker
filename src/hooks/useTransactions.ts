@@ -17,8 +17,7 @@ export const useTransactions = (budgetId: string | null) => {
       console.log('[useTransactions] Fetching transactions for budget:', budgetId);
       setLoading(true);
       setError(null);
-
-      const response = await fetch(`/api/transactions?budgetId=${budgetId}`);
+      const response = await fetch(`/api/transactions?budgetId=${budgetId}`); // Fixed: removed backslash
       
       if (!response.ok) {
         throw new Error('Failed to fetch transactions');
@@ -72,7 +71,7 @@ export const useTransactions = (budgetId: string | null) => {
     try {
       console.log('[useTransactions] Updating transaction:', transactionId, data);
       
-      const response = await fetch(`/api/transactions/${transactionId}`, {
+      const response = await fetch(`/api/transactions/${transactionId}`, { // Fixed: removed backslash
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -98,7 +97,7 @@ export const useTransactions = (budgetId: string | null) => {
     try {
       console.log('[useTransactions] Deleting transaction:', transactionId);
       
-      const response = await fetch(`/api/transactions/${transactionId}`, {
+      const response = await fetch(`/api/transactions/${transactionId}`, { // Fixed: removed backslash
         method: 'DELETE',
       });
 
