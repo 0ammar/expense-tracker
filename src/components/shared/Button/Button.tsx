@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import './Button.scss';
 
@@ -9,7 +11,7 @@ interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   title?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   icon?: React.ReactNode;
 }
@@ -26,10 +28,9 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   icon,
 }) => {
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!disabled && !loading && onClick) {
-      console.log('[Button] Clicked:', title || 'Untitled button');
-      onClick();
+      onClick(e);
     }
   };
 

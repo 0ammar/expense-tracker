@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Edit, Trash2, TrendingUp, TrendingDown } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
 import { Transaction, TransactionType } from '@/types/transaction.types';
 import { formatCurrency } from '@/lib/formatters';
 import { getCategoryIcon } from '@/lib/constants';

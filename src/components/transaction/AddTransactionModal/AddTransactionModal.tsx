@@ -103,18 +103,32 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             fullWidth
             required
           />
-          <Input
-            type="number"
-            name="amount"
-            label="Amount (JOD)"
-            placeholder="0.000"
-            step="0.001"
-            value={formData.amount}
-            onChange={handleChange}
-            error={errors.amount}
-            fullWidth
-            required
-          />
+          
+          <div className="add-transaction-modal__row">
+            <Input
+              type="number"
+              name="amount"
+              label="Amount (JOD)"
+              placeholder="0.000"
+              step="0.001"
+              value={formData.amount}
+              onChange={handleChange}
+              error={errors.amount}
+              fullWidth
+              required
+            />
+            <Input
+              type="date"
+              name="date"
+              label="Date"
+              value={formData.date}
+              onChange={handleChange}
+              error={errors.date}
+              fullWidth
+              required
+            />
+          </div>
+
           <Select
             name="category"
             label="Category"
@@ -128,16 +142,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             fullWidth
             required
           />
-          <Input
-            type="date"
-            name="date"
-            label="Date"
-            value={formData.date}
-            onChange={handleChange}
-            error={errors.date}
-            fullWidth
-            required
-          />
+
           <div className="add-transaction-modal__textarea-wrapper">
             <label htmlFor="description" className="add-transaction-modal__label">Description (Optional)</label>
             <textarea

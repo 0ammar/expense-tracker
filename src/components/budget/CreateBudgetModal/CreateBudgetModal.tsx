@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Modal, Input, Select, Button } from '@/components';
 import { Budget } from '@/types/budget.types';
-import { getMonthOptions, getYearOptions } from './CreateBudgetModal.logic';
+import { getMonthOptions, getYearOptions, generateDefaultBudgetName, validateBudgetForm } from './CreateBudgetModal.logic';
 import './CreateBudgetModal.scss';
 
 interface CreateBudgetModalProps {
@@ -19,19 +19,36 @@ export const CreateBudgetModal: React.FC<CreateBudgetModalProps> = ({ isOpen, on
     month: now.getMonth() + 1,
     year: now.getFullYear(),
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: name === 'name' ? value : parseInt(value, 10) }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const validationErrors = validateBudgetForm(form);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     setLoading(true);
     try {
-      await onSubmit(form);
+      const budgetName = form.name.trim() || generateDefaultBudgetName(form.month, form.year);
+      
+      await onSubmit({
+        name: budgetName,
+        month: form.month,
+        year: form.year,
+      });
+      
       setForm({ name: '', month: now.getMonth() + 1, year: now.getFullYear() });
+      setErrors({});
       onClose();
     } finally {
       setLoading(false);
@@ -43,12 +60,12 @@ export const CreateBudgetModal: React.FC<CreateBudgetModalProps> = ({ isOpen, on
       <form onSubmit={handleSubmit} className="create-budget-form">
         <Input
           name="name"
-          label="Budget Name"
+          label="Budget Name (Optional)"
+          placeholder="Leave blank for default name"
           value={form.name}
           onChange={handleChange}
           disabled={loading}
           fullWidth
-          required
         />
 
         <div className="form-row">
@@ -58,6 +75,7 @@ export const CreateBudgetModal: React.FC<CreateBudgetModalProps> = ({ isOpen, on
             options={getMonthOptions()}
             value={form.month.toString()}
             onChange={handleChange}
+            error={errors.month}
             disabled={loading}
             fullWidth
             required
@@ -68,6 +86,7 @@ export const CreateBudgetModal: React.FC<CreateBudgetModalProps> = ({ isOpen, on
             options={getYearOptions()}
             value={form.year.toString()}
             onChange={handleChange}
+            error={errors.year}
             disabled={loading}
             fullWidth
             required

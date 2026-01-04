@@ -1,5 +1,4 @@
-@import "variables";
-@import "mixins";
+
 
 .page {
   @include container;
@@ -25,7 +24,7 @@
     margin: 0;
 
     @media (max-width: 768px) {
-      font-size: 1.125rem;
+      font-size: .9rem;
     }
   }
 }

@@ -1,21 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Plus, ArrowLeft, Archive, Trash2 } from 'lucide-react';
-import { BudgetWithStats, Transaction, TransactionType } from '@/types';
+import { BudgetWithStats, Transaction, } from '@/types';
 import { useTransactions, useFilters } from '@/hooks';
-import {
-  BudgetSummary,
-  TransactionFilters,
-  TransactionList,
-  AddTransactionModal,
-  EditTransactionModal,
-  DeleteTransactionModal,
-  DeleteBudgetModal,
-  Button,
-  LoadingSpinner,
-} from '@/components';
+import { BudgetSummary, TransactionFilters, TransactionList, AddTransactionModal, EditTransactionModal, DeleteTransactionModal, DeleteBudgetModal, Button, LoadingSpinner, ArchiveBudgetModal, } from '@/components';
 import styles from './page.module.scss';
 
 export default function BudgetDetailPage() {
@@ -31,6 +21,8 @@ export default function BudgetDetailPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteBudgetModal, setShowDeleteBudgetModal] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
+
 
   useEffect(() => {
     const fetchBudget = async () => {
@@ -78,9 +70,10 @@ export default function BudgetDetailPage() {
           <h1>{budget.name}</h1>
         </div>
         <div className={styles.headerActions}>
-          <Button variant="secondary" icon={<Archive size={16} />} onClick={handleArchive}>
+          <Button variant="secondary" icon={<Archive size={16} />} onClick={() => setShowArchiveModal(true)}>
             Archive
           </Button>
+
           <Button variant="danger" icon={<Trash2 size={16} />} onClick={() => setShowDeleteBudgetModal(true)}>
             Delete
           </Button>
@@ -103,10 +96,10 @@ export default function BudgetDetailPage() {
           <TransactionFilters filters={filters} onFilterChange={updateFilter} />
         </div>
 
-        <TransactionList 
-          transactions={filteredTransactions} 
-          onEdit={(t) => { setSelectedTransaction(t); setShowEditModal(true); }} 
-          onDelete={(t) => { setSelectedTransaction(t); setShowDeleteModal(true); }} 
+        <TransactionList
+          transactions={filteredTransactions}
+          onEdit={(t) => { setSelectedTransaction(t); setShowEditModal(true); }}
+          onDelete={(t) => { setSelectedTransaction(t); setShowDeleteModal(true); }}
         />
       </div>
 
@@ -114,6 +107,7 @@ export default function BudgetDetailPage() {
       <EditTransactionModal isOpen={showEditModal} onClose={() => setShowEditModal(false)} transaction={selectedTransaction} onSubmit={updateTransaction} />
       <DeleteTransactionModal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} transaction={selectedTransaction} onConfirm={handleDeleteTransaction} />
       <DeleteBudgetModal isOpen={showDeleteBudgetModal} onClose={() => setShowDeleteBudgetModal(false)} budgetName={budget.name} onConfirm={handleDeleteBudget} />
+      <ArchiveBudgetModal isOpen={showArchiveModal} onClose={() => setShowArchiveModal(false)} budgetName={budget.name} onConfirm={handleArchive} />
     </div>
   );
 }

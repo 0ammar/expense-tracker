@@ -3,42 +3,65 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useBudgets } from '@/hooks/useBudgets';
-import { BudgetCard, CreateBudgetModal, Button, LoadingSpinner } from '@/components';
+import { BudgetCard, CreateBudgetModal, EditBudgetModal, Button, LoadingSpinner } from '@/components';
 import styles from './page.module.scss';
+import { Budget } from '@/types/budget.types';
 
 export default function BudgetsPage() {
-  const { budgets, loading, createBudget } = useBudgets(false);
-  const [showModal, setShowModal] = useState(false);
+  const { budgets, loading, createBudget, updateBudget } = useBudgets(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null);
 
   if (loading) return <LoadingSpinner text="Loading budgets..." />;
+
+  const handleEdit = (budget: Budget) => {
+    setSelectedBudget(budget);
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = async (data: { name?: string }) => {
+    if (!selectedBudget) return;
+    await updateBudget({ id: selectedBudget.id, name: data.name });
+  };
 
   return (
     <div className={styles.budgetsPage}>
       <div className={styles.header}>
         <h1>My Budgets</h1>
-        <Button 
-          variant="primary" 
-          icon={<Plus size={20} />} 
-          onClick={() => setShowModal(true)}
+        <Button
+          variant="primary"
+          icon={<Plus size={20} />}
+          onClick={() => setShowCreateModal(true)}
           className={styles.createBtn}
         >
-          <span>Create Budget</span>
+          Create Budget
         </Button>
       </div>
 
-      {budgets.length > 0 ? (
-        <div className={styles.grid}>
-          {budgets.map((budget) => (
-            <BudgetCard key={budget.id} budget={budget} />
-          ))}
-        </div>
-      ) : (
-        <div className={styles.empty}>
-          <p>No budgets yet. Create your first budget to get started!</p>
-        </div>
-      )}
+      <div className={styles.grid}>
+        {budgets.map((budget) => (
+          <BudgetCard
+            key={budget.id}
+            budget={budget}
+            showEdit
+            onEdit={() => handleEdit(budget)}
+          />
+        ))}
+      </div>
 
-      <CreateBudgetModal isOpen={showModal} onClose={() => setShowModal(false)} onSubmit={createBudget} />
+      <CreateBudgetModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={createBudget}
+      />
+
+      <EditBudgetModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        budget={selectedBudget}
+        onSubmit={handleUpdate}
+      />
     </div>
   );
 }

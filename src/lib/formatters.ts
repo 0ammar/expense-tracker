@@ -2,8 +2,8 @@ export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('en-JO', {
     style: 'currency',
     currency: 'JOD',
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(amount);
 };
 

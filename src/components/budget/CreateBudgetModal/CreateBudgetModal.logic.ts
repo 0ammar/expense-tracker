@@ -6,16 +6,13 @@ interface BudgetFormData {
   year: number;
 }
 
+export const generateDefaultBudgetName = (month: number, year: number): string => {
+  const monthName = MONTHS[month - 1];
+  return `${monthName} ${year}`;
+};
+
 export const validateBudgetForm = (data: BudgetFormData): Record<string, string> => {
   const errors: Record<string, string> = {};
-
-  console.log('[CreateBudgetModal.logic] Validating form data');
-
-  if (!data.name.trim()) {
-    errors.name = 'Budget name is required';
-  } else if (data.name.trim().length < 3) {
-    errors.name = 'Budget name must be at least 3 characters';
-  }
 
   if (!data.month || data.month < 1 || data.month > 12) {
     errors.month = 'Invalid month selected';
@@ -25,7 +22,6 @@ export const validateBudgetForm = (data: BudgetFormData): Record<string, string>
     errors.year = 'Invalid year selected';
   }
 
-  console.log('[CreateBudgetModal.logic] Validation errors:', Object.keys(errors).length);
   return errors;
 };
 

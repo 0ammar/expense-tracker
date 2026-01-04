@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Budget, BudgetWithStats, CreateBudgetDto } from '@/types/budget.types';
+import { useState, useEffect, useCallback } from "react";
+import { Budget, BudgetWithStats, CreateBudgetDto } from "@/types/budget.types";
 
 export const useBudgets = (isArchived: boolean = false) => {
   const [budgets, setBudgets] = useState<BudgetWithStats[]>([]);
@@ -8,22 +8,14 @@ export const useBudgets = (isArchived: boolean = false) => {
 
   const fetchBudgets = useCallback(async () => {
     try {
-      console.log('[useBudgets] Fetching budgets, archived:', isArchived);
       setLoading(true);
       setError(null);
-
       const response = await fetch(`/api/budgets?archived=${isArchived}`);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch budgets');
-      }
-
+      if (!response.ok) throw new Error("Failed to fetch budgets");
       const data = await response.json();
-      console.log('[useBudgets] Fetched budgets:', data.budgets?.length || 0);
       setBudgets(data.budgets || []);
     } catch (err) {
-      console.error('[useBudgets] Error fetching budgets:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -35,68 +27,81 @@ export const useBudgets = (isArchived: boolean = false) => {
 
   const createBudget = async (data: CreateBudgetDto): Promise<Budget | null> => {
     try {
-      console.log('[useBudgets] Creating budget:', data);
-      
-      const response = await fetch('/api/budgets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/budgets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create budget');
+        let errorMessage = "Failed to create budget";
+        try {
+          const errorData = await response.json();
+          if (errorData?.error) errorMessage = errorData.error;
+        } catch {
+          // ignore
+        }
+        throw new Error(errorMessage);
       }
-
-      const result = await response.json();
-      console.log('[useBudgets] Budget created:', result.budget);
-      
+      const newBudget = await response.json();
       await fetchBudgets();
-      return result.budget;
+      return newBudget.budget || null;
     } catch (err) {
-      console.error('[useBudgets] Error creating budget:', err);
+      console.error("[useBudgets] Error creating budget:", err);
+      throw err;
+    }
+  };
+
+  const updateBudget = async (data: { id: string; name?: string }): Promise<Budget | null> => {
+    try {
+      const body: { name?: string } = {};
+      if (data.name !== undefined) body.name = data.name;
+
+      const response = await fetch(`/api/budgets/${data.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        let errorMessage = "Failed to update budget";
+        try {
+          const errorData = await response.json();
+          if (errorData?.error) errorMessage = errorData.error;
+        } catch {
+          // ignore
+        }
+        throw new Error(errorMessage);
+      }
+      const updatedBudget = await response.json();
+      await fetchBudgets();
+      return updatedBudget.budget || null;
+    } catch (err) {
+      console.error("[useBudgets] Error updating budget:", err);
       throw err;
     }
   };
 
   const deleteBudget = async (budgetId: string): Promise<void> => {
     try {
-      console.log('[useBudgets] Deleting budget:', budgetId);
-      
-      const response = await fetch(`/api/budgets/${budgetId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete budget');
-      }
-
-      console.log('[useBudgets] Budget deleted');
+      const response = await fetch(`/api/budgets/${budgetId}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete budget");
       await fetchBudgets();
     } catch (err) {
-      console.error('[useBudgets] Error deleting budget:', err);
+      console.error("[useBudgets] Error deleting budget:", err);
       throw err;
     }
   };
 
   const archiveBudget = async (budgetId: string, archive: boolean): Promise<void> => {
     try {
-      console.log('[useBudgets] Archiving budget:', budgetId, archive);
-      
       const response = await fetch(`/api/budgets/${budgetId}/archive`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isArchived: archive }),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to archive budget');
-      }
-
-      console.log('[useBudgets] Budget archived');
+      if (!response.ok) throw new Error("Failed to archive budget");
       await fetchBudgets();
     } catch (err) {
-      console.error('[useBudgets] Error archiving budget:', err);
+      console.error("[useBudgets] Error archiving budget:", err);
       throw err;
     }
   };
@@ -107,6 +112,7 @@ export const useBudgets = (isArchived: boolean = false) => {
     error,
     refetch: fetchBudgets,
     createBudget,
+    updateBudget,
     deleteBudget,
     archiveBudget,
   };

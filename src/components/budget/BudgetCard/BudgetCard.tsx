@@ -1,19 +1,25 @@
 'use client';
 
-import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Wallet, TrendingUp, TrendingDown, FileText } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, FileText, Calendar } from 'lucide-react';
 import { BudgetWithStats } from '@/types/budget.types';
 import { formatCurrency } from '@/lib/formatters';
-import { Card } from '@/components';
+import { MONTHS } from '@/lib/constants';
+import { Card, Button } from '@/components';
 import './BudgetCard.scss';
 
 interface BudgetCardProps {
   budget: BudgetWithStats;
+  showRestore?: boolean;
+  onRestore?: () => void;
+  showEdit?: boolean;
+  onEdit?: () => void;
 }
 
-export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
+export const BudgetCard: React.FC<BudgetCardProps> = ({ budget, showRestore, onRestore, showEdit, onEdit }) => {
   const router = useRouter();
+  const monthName = MONTHS[budget.month - 1];
+  const periodLabel = `${monthName} ${budget.year}`;
 
   return (
     <Card variant="interactive" onClick={() => router.push(`/budgets/${budget.id}`)} className="budget-card">
@@ -23,6 +29,11 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
           <FileText size={12} />
           <span>{budget.transactionCount}</span>
         </div>
+      </div>
+
+      <div className="budget-card__period">
+        <Calendar size={14} />
+        <span>{periodLabel}</span>
       </div>
 
       <div className="budget-card__balance">
@@ -51,6 +62,35 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
           </div>
         </div>
       </div>
+
+      {showRestore && onRestore && (
+        <div className="budget-card__actions">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation();
+              onRestore();
+            }}
+          >
+            Restore
+          </Button>
+        </div>
+      )}
+      {showEdit && onEdit && (
+        <div className="budget-card__actions">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation();
+              onEdit();
+            }}
+          >
+            Edit
+          </Button>
+        </div>
+      )}
     </Card>
   );
 };

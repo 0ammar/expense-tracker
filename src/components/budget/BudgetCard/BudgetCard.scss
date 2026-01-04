@@ -1,5 +1,4 @@
-@import "variables";
-@import "mixins";
+
 
 .budget-card {
   display: flex;
@@ -31,6 +30,22 @@
 
     span {
       line-height: 1;
+    }
+  }
+
+  &__period {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    color: $color-text-secondary;
+    padding: 0.375rem 0.5rem;
+    background: $color-neutral-50;
+    border-radius: $radius-sm;
+    width: fit-content;
+
+    svg {
+      flex-shrink: 0;
     }
   }
 
@@ -95,5 +110,9 @@
         font-weight: $font-weight-semibold;
       }
     }
+  }
+
+  &__actions {
+    margin-top: 0.5rem;
   }
 }
