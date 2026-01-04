@@ -14,7 +14,6 @@ export { DeleteTransactionModal } from './transaction/DeleteTransactionModal/Del
 export { TransactionFilters } from './transaction/TransactionFilters/TransactionFilters';
 
 export { SummaryCard } from './analytics/SummaryCard/SummaryCard';
-export { CategoryChart } from './analytics/CategoryChart/CategoryChart';
 
 export { Header } from './shared/Header/Header';
 export { Button } from './shared/Button/Button';

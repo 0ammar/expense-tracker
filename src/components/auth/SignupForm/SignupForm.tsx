@@ -2,174 +2,123 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Input } from '@/components/shared/Input/Input';
-import { Button } from '@/components/shared/Button/Button';
-import { validateSignupForm } from './SignupForm.logic';
+import { Input, Button } from '@/components';
+import { validateSignupForm, getPasswordStrength } from './SignupForm.logic';
 import './SignupForm.scss';
 
 export const SignupForm: React.FC = () => {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
-  const [generalError, setGeneralError] = useState('');
+  const strength = getPasswordStrength(form.password);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log('[SignupForm] Field changed:', name);
-    
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-    
-    if (generalError) {
-      setGeneralError('');
-    }
+    setForm(prev => ({ ...prev, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('[SignupForm] Submitting form');
-
-    const validationErrors = validateSignupForm(formData);
+    const validationErrors = validateSignupForm(form);
     if (Object.keys(validationErrors).length > 0) {
-      console.log('[SignupForm] Validation errors:', validationErrors);
       setErrors(validationErrors);
       return;
     }
 
     setLoading(true);
-    setGeneralError('');
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: form.name, email: form.email, password: form.password }),
+    });
 
-    try {
-      console.log('[SignupForm] Creating new user');
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('[SignupForm] Signup failed:', data.error);
-        setGeneralError(data.error || 'Failed to create account');
-        setLoading(false);
-        return;
-      }
-
-      console.log('[SignupForm] Signup successful, redirecting to login');
-      router.push('/login?message=Account created successfully. Please sign in.');
-    } catch (error) {
-      console.error('[SignupForm] Unexpected error:', error);
-      setGeneralError('An unexpected error occurred. Please try again.');
+    if (!res.ok) {
+      const data = await res.json();
+      setErrors({ general: data.error || 'Signup failed' });
       setLoading(false);
+    } else {
+      router.push('/login');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="signup-form">
-      <div className="signup-form__header">
-        <h1 className="signup-form__title">Create Account</h1>
-        <p className="signup-form__subtitle">Start tracking your expenses today</p>
+    <form onSubmit={handleSubmit} className="auth-form">
+      <div className="auth-form__header">
+        <h1>Create Account</h1>
+        <p>Get started for free</p>
       </div>
 
-      {generalError && (
-        <div className="signup-form__error" role="alert">
-          {generalError}
+      {errors.general && <div className="auth-form__error">{errors.general}</div>}
+
+      <div className="auth-form__fields">
+        <Input 
+          type="text" 
+          name="name" 
+          label="Full Name" 
+          value={form.name} 
+          onChange={handleChange} 
+          error={errors.name} 
+          disabled={loading} 
+          autoComplete="name" 
+          fullWidth 
+          required 
+        />
+        <Input 
+          type="email" 
+          name="email" 
+          label="Email" 
+          value={form.email} 
+          onChange={handleChange} 
+          error={errors.email} 
+          disabled={loading} 
+          autoComplete="email" 
+          fullWidth 
+          required 
+        />
+        <div>
+          <Input 
+            type="password" 
+            name="password" 
+            label="Password" 
+            value={form.password} 
+            onChange={handleChange} 
+            error={errors.password} 
+            disabled={loading} 
+            autoComplete="new-password" 
+            fullWidth 
+            required 
+          />
+          {form.password && (
+            <div className="password-strength">
+              <div className={`password-strength__bar password-strength__bar--${strength.level}`}>
+                <div className="password-strength__fill" style={{ width: `${strength.score}%` }} />
+              </div>
+              <span className={`password-strength__text password-strength__text--${strength.level}`}>{strength.label}</span>
+            </div>
+          )}
         </div>
-      )}
-
-      <div className="signup-form__fields">
-        <Input
-          type="text"
-          name="name"
-          id="name"
-          label="Full Name"
-          placeholder="John Doe"
-          value={formData.name}
-          onChange={handleChange}
-          error={errors.name}
-          disabled={loading}
-          autoComplete="name"
-          fullWidth
-          required
-        />
-
-        <Input
-          type="email"
-          name="email"
-          id="email"
-          label="Email Address"
-          placeholder="your.email@example.com"
-          value={formData.email}
-          onChange={handleChange}
-          error={errors.email}
-          disabled={loading}
-          autoComplete="email"
-          fullWidth
-          required
-        />
-
-        <Input
-          type="password"
-          name="password"
-          id="password"
-          label="Password"
-          placeholder="At least 6 characters"
-          value={formData.password}
-          onChange={handleChange}
-          error={errors.password}
-          disabled={loading}
-          autoComplete="new-password"
-          fullWidth
-          required
-        />
-
-        <Input
-          type="password"
-          name="confirmPassword"
-          id="confirmPassword"
-          label="Confirm Password"
-          placeholder="Re-enter your password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          error={errors.confirmPassword}
-          disabled={loading}
-          autoComplete="new-password"
-          fullWidth
-          required
+        <Input 
+          type="password" 
+          name="confirmPassword" 
+          label="Confirm Password" 
+          value={form.confirmPassword} 
+          onChange={handleChange} 
+          error={errors.confirmPassword} 
+          disabled={loading} 
+          autoComplete="new-password" 
+          fullWidth 
+          required 
         />
       </div>
 
-      <Button
-        type="submit"
-        variant="primary"
-        size="lg"
-        loading={loading}
-        disabled={loading}
-        title="Create your account"
-        className="signup-form__submit"
-      >
+      <Button type="submit" variant="primary" size="lg" loading={loading} className="auth-form__submit">
         Sign Up
       </Button>
 
-      <p className="signup-form__footer">
-        Already have an account?{' '}
-        <a href="/login" className="signup-form__link">
-          Sign in
-        </a>
+      <p className="auth-form__footer">
+        Already have an account? <a href="/login">Sign in</a>
       </p>
     </form>
   );

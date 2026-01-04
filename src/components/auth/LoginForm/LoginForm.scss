@@ -1,59 +1,87 @@
-.login-form {
+@import "variables";
+@import "mixins";
+@import "effects";
+
+.auth-form {
   width: 100%;
-  max-width: 450px;
-  @include flex-column;
-  gap: $spacing-xl;
+  max-width: 400px;
+  padding: $spacing-xl;
+  background: $color-bg-primary;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xl;
+  animation: fadeInUp 0.5s ease-out;
+  box-sizing: border-box;
+
+  @include respond-to(mobile) {
+    max-width: 100%;
+    padding: $spacing-lg;
+    box-shadow: none;
+  }
 
   &__header {
-    @include flex-column;
-    gap: $spacing-sm;
     text-align: center;
-  }
+    margin-bottom: $spacing-lg;
 
-  &__title {
-    @include heading-2;
-  }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: $font-weight-bold;
+      color: $color-text-primary;
+      margin-bottom: $spacing-xs;
+    }
 
-  &__subtitle {
-    @include body-base;
-    color: $color-text-secondary;
+    p {
+      font-size: 0.875rem;
+      color: $color-text-secondary;
+    }
   }
 
   &__error {
-    padding: $spacing-md;
+    padding: $spacing-sm $spacing-md;
     background: rgba($color-danger, 0.1);
-    border: 1px solid $color-danger;
-    border-radius: $radius-md;
+    border-left: 3px solid $color-danger;
+    border-radius: $radius-sm;
     color: $color-danger;
-    @include body-small;
-    text-align: center;
-    animation: slideInDown $transition-base ease-out;
+    font-size: 0.875rem;
+    margin-bottom: $spacing-md;
+    animation: shake 0.4s ease-in-out;
   }
 
   &__fields {
-    @include flex-column;
-    gap: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   &__submit {
     width: 100%;
+    box-sizing: border-box;
   }
 
   &__footer {
-    @include body-small;
     text-align: center;
+    font-size: 0.875rem;
     color: $color-text-secondary;
-  }
+    margin-top: $spacing-md;
 
-  &__link {
-    color: $color-primary;
-    font-weight: $font-weight-medium;
-    text-decoration: none;
-    transition: color $transition-fast;
+    a {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+      text-decoration: none;
+      transition: all $transition-fast;
 
-    &:hover {
-      color: $color-primary-dark;
-      text-decoration: underline;
+      &:hover {
+        color: $color-primary-dark;
+        text-decoration: underline;
+      }
     }
   }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
 }

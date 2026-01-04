@@ -9,42 +9,21 @@ interface SelectOption {
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   error?: string;
-  helperText?: string;
   options: SelectOption[];
   fullWidth?: boolean;
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, helperText, options, fullWidth = false, className = '', ...props }, ref) => {
-    console.log('[Select] Rendering:', props.name);
-
+  ({ label, error, options, fullWidth, className = '', ...props }, ref) => {
     return (
       <div className={`select-wrapper ${fullWidth ? 'select-wrapper--full' : ''} ${className}`}>
-        {label && (
-          <label htmlFor={props.id || props.name} className="select-wrapper__label">
-            {label}
-          </label>
-        )}
-        <select
-          ref={ref}
-          className={`select ${error ? 'select--error' : ''}`}
-          aria-describedby={error ? `${props.name}-error` : undefined}
-          {...props}
-        >
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
+        {label && <label className="select-wrapper__label">{label}</label>}
+        <select ref={ref} className={`select ${error ? 'select--error' : ''}`} {...props}>
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
-        {error && (
-          <span id={`${props.name}-error`} className="select-wrapper__error" role="alert">
-            {error}
-          </span>
-        )}
-        {helperText && !error && (
-          <span className="select-wrapper__helper">{helperText}</span>
-        )}
+        {error && <span className="select-wrapper__error">{error}</span>}
       </div>
     );
   }

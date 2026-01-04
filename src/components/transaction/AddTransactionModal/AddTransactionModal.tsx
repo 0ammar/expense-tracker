@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/shared/Modal/Modal';
-import { Input } from '@/components/shared/Input/Input';
-import { Select } from '@/components/shared/Select/Select';
-import { Button } from '@/components/shared/Button/Button';
+import { Modal, Input, Select, Button } from '@/components';
 import { TransactionType, Transaction } from '@/types/transaction.types';
 import { getCategoriesByType } from '@/lib/constants';
 import { validateTransactionForm } from './AddTransactionModal.logic';
@@ -25,12 +22,7 @@ interface AddTransactionModalProps {
   }) => Promise<Transaction | null>;
 }
 
-export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
-  isOpen,
-  onClose,
-  budgetId,
-  onSubmit,
-}) => {
+export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, budgetId, onSubmit }) => {
   const [formData, setFormData] = useState({
     name: '',
     amount: '',
@@ -79,8 +71,6 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         type: TransactionType.EXPENSE,
       });
       onClose();
-    } catch (error) {
-      console.error('[AddTransactionModal] Error:', error);
     } finally {
       setLoading(false);
     }
@@ -130,7 +120,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             label="Category"
             options={[
               { value: '', label: 'Select category' },
-              ...categories.map((cat) => ({ value: cat.value, label: `${cat.icon} ${cat.label}` })),
+              ...categories.map((cat) => ({ value: cat.value, label: cat.label })),
             ]}
             value={formData.category}
             onChange={handleChange}
@@ -166,7 +156,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             Cancel
           </Button>
           <Button type="submit" variant="primary" loading={loading} disabled={loading}>
-            Add Transaction
+            Add
           </Button>
         </div>
       </form>

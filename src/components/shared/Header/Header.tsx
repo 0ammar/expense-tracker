@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import { HEADER_LABELS } from './Header.constants';
+import { Archive, LayoutDashboard, LogOut } from 'lucide-react';
 import './Header.scss';
 
 export const Header: React.FC = () => {
@@ -13,41 +13,37 @@ export const Header: React.FC = () => {
   const isArchivePage = pathname === '/archives';
 
   const handleSignOut = async () => {
-    console.log('[Header] Signing out user');
-    try {
-      await signOut({ callbackUrl: '/login' });
-    } catch (error) {
-      console.error('[Header] Error signing out:', error);
-    }
+    console.log('[Header] Signing out');
+    await signOut({ callbackUrl: '/login' });
   };
 
   return (
     <header className="header">
-      <div className="header__container container">
-        <Link href="/budgets" className="header__logo">
-          {HEADER_LABELS.LOGO}
-        </Link>
-
-        <div className="header__actions">
-          <Link
-            href={isArchivePage ? '/budgets' : '/archives'}
-            className="header__link"
-            title={isArchivePage ? HEADER_LABELS.BUDGETS : HEADER_LABELS.ARCHIVES}
-          >
-            {isArchivePage ? HEADER_LABELS.BUDGETS : HEADER_LABELS.ARCHIVES}
+      <div className="container">
+        <div className="header__content">
+          <Link href="/budgets" className="header__logo">
+            <span className="header__logo-text">ExpenseTracker</span>
           </Link>
 
-          <div className="header__user">
-            <span className="header__user-name">{session?.user?.name}</span>
-            <button
-              type="button"
-              title={HEADER_LABELS.SIGN_OUT}
-              onClick={handleSignOut}
-              className="header__sign-out"
+          <nav className="header__nav">
+            <Link
+              href={isArchivePage ? '/budgets' : '/archives'}
+              className="header__nav-link"
             >
-              {HEADER_LABELS.SIGN_OUT}
-            </button>
-          </div>
+              {isArchivePage ? <LayoutDashboard size={18} /> : <Archive size={18} />}
+              <span>{isArchivePage ? 'Budgets' : 'Archives'}</span>
+            </Link>
+
+            <div className="header__divider" />
+
+            <div className="header__user">
+              <span className="header__username">{session?.user?.name}</span>
+              <button onClick={handleSignOut} className="header__signout" title="Sign out">
+                <LogOut size={18} />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </nav>
         </div>
       </div>
     </header>

@@ -1,41 +1,22 @@
-import { isValidEmail, isValidPassword } from '@/lib/utils';
-
-interface SignupFormData {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export const validateSignupForm = (data: SignupFormData): Record<string, string> => {
+export const validateSignupForm = (data: { name: string; email: string; password: string; confirmPassword: string }) => {
   const errors: Record<string, string> = {};
-
-  console.log('[SignupForm.logic] Validating form data');
-
-  if (!data.name.trim()) {
-    errors.name = 'Name is required';
-  } else if (data.name.trim().length < 2) {
-    errors.name = 'Name must be at least 2 characters';
-  }
-
-  if (!data.email.trim()) {
-    errors.email = 'Email is required';
-  } else if (!isValidEmail(data.email)) {
-    errors.email = 'Please enter a valid email address';
-  }
-
-  if (!data.password) {
-    errors.password = 'Password is required';
-  } else if (!isValidPassword(data.password)) {
-    errors.password = 'Password must be at least 6 characters';
-  }
-
-  if (!data.confirmPassword) {
-    errors.confirmPassword = 'Please confirm your password';
-  } else if (data.password !== data.confirmPassword) {
-    errors.confirmPassword = 'Passwords do not match';
-  }
-
-  console.log('[SignupForm.logic] Validation errors:', Object.keys(errors).length);
+  if (!data.name.trim()) errors.name = 'Name is required';
+  if (!data.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) errors.email = 'Invalid email';
+  if (data.password.length < 6) errors.password = 'Min 6 characters';
+  if (data.password !== data.confirmPassword) errors.confirmPassword = 'Passwords do not match';
   return errors;
+};
+
+export const getPasswordStrength = (pwd: string) => {
+  if (!pwd) return { score: 0, level: 'none', label: '' };
+  let score = 0;
+  if (pwd.length >= 6) score += 25;
+  if (pwd.length >= 10) score += 25;
+  if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score += 25;
+  if (/\d/.test(pwd) && /[!@#$%^&*]/.test(pwd)) score += 25;
+  
+  if (score <= 25) return { score, level: 'weak', label: 'Weak' };
+  if (score <= 50) return { score, level: 'fair', label: 'Fair' };
+  if (score <= 75) return { score, level: 'good', label: 'Good' };
+  return { score, level: 'strong', label: 'Strong' };
 };

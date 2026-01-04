@@ -1,34 +1,25 @@
+'use client';
+
 import React from 'react';
-import { formatCurrency, formatNumber } from '@/lib/formatters';
-import { Card } from '@/components/shared/Card/Card';
+import { formatCurrency } from '@/lib/formatters';
 import './SummaryCard.scss';
 
 interface SummaryCardProps {
   title: string;
   value: number;
-  type?: 'success' | 'danger' | 'warning' | 'info';
-  icon?: string;
+  type: 'success' | 'danger' | 'info';
+  icon: React.ReactNode;
   isCurrency?: boolean;
 }
 
-export const SummaryCard: React.FC<SummaryCardProps> = ({
-  title,
-  value,
-  type = 'info',
-  icon,
-  isCurrency = true,
-}) => {
-  console.log('[SummaryCard] Rendering:', title, value);
-
-  const formattedValue = isCurrency ? formatCurrency(value) : formatNumber(value);
-
+export const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, type, icon, isCurrency = true }) => {
   return (
-    <Card className={`summary-card summary-card--${type}`}>
-      <div className="summary-card__header">
-        {icon && <span className="summary-card__icon">{icon}</span>}
-        <h3 className="summary-card__title">{title}</h3>
+    <div className={`summary-card summary-card--${type}`}>
+      <div className="summary-card__icon">{icon}</div>
+      <div className="summary-card__content">
+        <p>{title}</p>
+        <h3>{isCurrency ? formatCurrency(value) : value}</h3>
       </div>
-      <p className="summary-card__value">{formattedValue}</p>
-    </Card>
+    </div>
   );
 };

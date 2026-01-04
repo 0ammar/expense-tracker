@@ -1,67 +1,51 @@
 'use client';
 
 import React from 'react';
-import { Search, X } from 'lucide-react';
-import { Select } from '@/components/shared/Select/Select';
-import { Button } from '@/components/shared/Button/Button';
-import { TransactionType, TransactionFilters as ITransactionFilters } from '@/types/transaction.types';
+import { Search } from 'lucide-react';
+import { Select } from '@/components';
+import { TransactionType, TransactionFilters as IFilters } from '@/types/transaction.types';
 import { INCOME_CATEGORIES, EXPENSE_CATEGORIES } from '@/lib/constants';
-import { FILTER_LABELS } from './TransactionFilters.constants';
 import './TransactionFilters.scss';
 
 interface TransactionFiltersProps {
-  filters: ITransactionFilters;
+  filters: IFilters;
   onFilterChange: (key: string, value: string | TransactionType | 'ALL') => void;
-  onReset: () => void;
 }
 
-export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
-  filters,
-  onFilterChange,
-  onReset,
-}) => {
-  const allCategories = [...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES];
-  const uniqueCategories = Array.from(new Set(allCategories.map((c) => c.value))).map((value) =>
-    allCategories.find((c) => c.value === value)!
-  );
+export const TransactionFilters: React.FC<TransactionFiltersProps> = ({ filters, onFilterChange }) => {
+  const allCategories = Array.from(new Set([...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES].map(c => c.value)));
 
   return (
-    <div className="transaction-filters">
-      <div className="transaction-filters__search">
-        <Search className="transaction-filters__search-icon" size={20} />
+    <>
+      <div className="filters-search">
+        <Search size={16} />
         <input
           type="text"
-          placeholder={FILTER_LABELS.SEARCH_PLACEHOLDER}
+          placeholder="Search transactions..."
           value={filters.searchQuery || ''}
           onChange={(e) => onFilterChange('searchQuery', e.target.value)}
-          className="transaction-filters__search-input"
         />
       </div>
 
-      <Select
-        name="type"
-        options={[
-          { value: 'ALL', label: 'All Types' },
-          { value: TransactionType.INCOME, label: 'Income' },
-          { value: TransactionType.EXPENSE, label: 'Expense' },
-        ]}
-        value={filters.type || 'ALL'}
-        onChange={(e) => onFilterChange('type', e.target.value)}
-      />
+      <div className="filters-row">
+        <Select
+          name="type"
+          options={[
+            { value: 'ALL', label: 'All Types' },
+            { value: TransactionType.INCOME, label: 'Income' },
+            { value: TransactionType.EXPENSE, label: 'Expense' },
+          ]}
+          value={filters.type || 'ALL'}
+          onChange={(e) => onFilterChange('type', e.target.value)}
+        />
 
-      <Select
-        name="category"
-        options={[
-          { value: 'all', label: 'All Categories' },
-          ...uniqueCategories.map((cat) => ({ value: cat.value, label: cat.label })),
-        ]}
-        value={filters.category || 'all'}
-        onChange={(e) => onFilterChange('category', e.target.value)}
-      />
-
-      <Button type="button" variant="ghost" icon={<X size={16} />} onClick={onReset} title="Reset filters">
-        {FILTER_LABELS.RESET}
-      </Button>
-    </div>
+        <Select
+          name="category"
+          options={[{ value: 'all', label: 'All Categories' }, ...allCategories.map(v => ({ value: v, label: v }))]}
+          value={filters.category || 'all'}
+          onChange={(e) => onFilterChange('category', e.target.value)}
+        />
+      </div>
+    </>
   );
 };

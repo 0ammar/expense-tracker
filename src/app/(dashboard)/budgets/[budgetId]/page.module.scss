@@ -1,0 +1,119 @@
+@import "variables";
+@import "mixins";
+
+.page {
+  @include container;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: $font-weight-bold;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  button {
+    padding: 0.5rem;
+  }
+}
+
+.headerActions {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    @media (max-width: 768px) {
+      font-size: 0.75rem;
+      padding: 0.5rem 0.625rem;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+}
+
+.summary {
+  margin-bottom: 1.5rem;
+}
+
+.section {
+  margin-bottom: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: $font-weight-bold;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+
+  button {
+    @media (max-width: 768px) {
+      font-size: 0.75rem;
+      padding: 0.5rem 0.625rem;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+.filtersRow {
+  display: contents;
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    grid-column: 1;
+  }
+}

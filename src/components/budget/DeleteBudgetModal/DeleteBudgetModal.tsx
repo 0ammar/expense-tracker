@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/shared/Modal/Modal';
-import { Button } from '@/components/shared/Button/Button';
-import { DELETE_BUDGET_LABELS } from './DeleteBudgetModal.constants';
+import { AlertTriangle } from 'lucide-react';
+import { Modal, Button } from '@/components';
 import './DeleteBudgetModal.scss';
 
 interface DeleteBudgetModalProps {
@@ -22,47 +21,31 @@ export const DeleteBudgetModal: React.FC<DeleteBudgetModalProps> = ({
   const [loading, setLoading] = useState(false);
 
   const handleConfirm = async () => {
-    console.log('[DeleteBudgetModal] Confirming deletion');
     setLoading(true);
-
     try {
       await onConfirm();
-      console.log('[DeleteBudgetModal] Budget deleted successfully');
       onClose();
-    } catch (error) {
-      console.error('[DeleteBudgetModal] Error deleting budget:', error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={DELETE_BUDGET_LABELS.TITLE} size="sm">
-      <div className="delete-budget-modal">
-        <p className="delete-budget-modal__message">
-          {DELETE_BUDGET_LABELS.MESSAGE} <strong>{budgetName}</strong>?
+    <Modal isOpen={isOpen} onClose={onClose} title="Delete Budget" size="sm">
+      <div className="delete-budget">
+        <div className="delete-budget__warning">
+          <AlertTriangle size={20} />
+          <p>Are you sure you want to delete <strong>{budgetName}</strong>?</p>
+        </div>
+        <p className="delete-budget__info">
+          This action cannot be undone. All transactions will be deleted.
         </p>
-        <p className="delete-budget-modal__warning">{DELETE_BUDGET_LABELS.WARNING}</p>
-
-        <div className="delete-budget-modal__actions">
-          <Button
-            type="button"
-            title="Cancel deletion"
-            variant="secondary"
-            onClick={onClose}
-            disabled={loading}
-          >
-            {DELETE_BUDGET_LABELS.CANCEL}
+        <div className="delete-budget__actions">
+          <Button variant="secondary" onClick={onClose} disabled={loading}>
+            Cancel
           </Button>
-          <Button
-            type="button"
-            title="Confirm deletion"
-            variant="danger"
-            loading={loading}
-            disabled={loading}
-            onClick={handleConfirm}
-          >
-            {DELETE_BUDGET_LABELS.CONFIRM}
+          <Button variant="danger" loading={loading} onClick={handleConfirm}>
+            Delete
           </Button>
         </div>
       </div>

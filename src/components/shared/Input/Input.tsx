@@ -11,7 +11,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, helperText, fullWidth = false, className = '', ...props }, ref) => {
     console.log('[Input] Rendering:', props.name || props.placeholder);
-
+    
     return (
       <div className={`input-wrapper ${fullWidth ? 'input-wrapper--full' : ''} ${className}`}>
         {label && (

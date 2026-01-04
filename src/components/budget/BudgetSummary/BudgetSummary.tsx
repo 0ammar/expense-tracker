@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
+import { Wallet, TrendingUp, TrendingDown, FileText } from 'lucide-react';
 import { BudgetWithStats } from '@/types/budget.types';
-import { SummaryCard } from '@/components/analytics/SummaryCard/SummaryCard';
-import { BUDGET_SUMMARY_LABELS } from './BudgetSummary.constants';
+import { SummaryCard } from '@/components';
 import './BudgetSummary.scss';
 
 interface BudgetSummaryProps {
@@ -11,36 +11,31 @@ interface BudgetSummaryProps {
 }
 
 export const BudgetSummary: React.FC<BudgetSummaryProps> = ({ budget }) => {
-  console.log('[BudgetSummary] Rendering summary for budget:', budget.id);
-
   return (
     <div className="budget-summary">
       <SummaryCard
-        title={BUDGET_SUMMARY_LABELS.NET_BALANCE}
+        title="Net Balance"
         value={budget.netBalance}
         type={budget.netBalance >= 0 ? 'success' : 'danger'}
-        icon="💰"
+        icon={<Wallet size={20} />}
       />
-
       <SummaryCard
-        title={BUDGET_SUMMARY_LABELS.TOTAL_INCOME}
+        title="Total Income"
         value={budget.totalIncome}
         type="success"
-        icon="↗"
+        icon={<TrendingUp size={20} />}
       />
-
       <SummaryCard
-        title={BUDGET_SUMMARY_LABELS.TOTAL_EXPENSE}
+        title="Total Expense"
         value={budget.totalExpense}
         type="danger"
-        icon="↘"
+        icon={<TrendingDown size={20} />}
       />
-
       <SummaryCard
-        title={BUDGET_SUMMARY_LABELS.TRANSACTIONS}
+        title="Transactions"
         value={budget.transactionCount}
         type="info"
-        icon="📊"
+        icon={<FileText size={20} />}
         isCurrency={false}
       />
     </div>

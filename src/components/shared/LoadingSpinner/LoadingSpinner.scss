@@ -1,45 +1,57 @@
-.loading-spinner-wrapper {
+@import "variables";
+@import "mixins";
+
+.spinner-wrapper {
   @include flex-column-center;
-  gap: $spacing-md;
   width: 100%;
-  padding: $spacing-xl;
+  min-height: 200px;
+  gap: 1rem;
 }
 
-.loading-spinner {
-  border-radius: $radius-full;
-  border-style: solid;
-  animation: spin 0.8s linear infinite;
+.spinner {
+  display: flex;
+  gap: 0.5rem;
 
-  &--sm {
-    width: 20px;
-    height: 20px;
-    border-width: 2px;
-  }
+  &--sm { gap: 0.25rem; }
+  &--lg { gap: 0.75rem; }
 
-  &--md {
-    width: 40px;
-    height: 40px;
-    border-width: 3px;
-  }
+  &__circle {
+    border-radius: 50%;
+    background: $color-primary;
+    animation: bounce 1.4s infinite ease-in-out both;
 
-  &--lg {
-    width: 60px;
-    height: 60px;
-    border-width: 4px;
-  }
+    .spinner--sm & {
+      width: 8px;
+      height: 8px;
+    }
 
-  &--primary {
-    border-color: $color-neutral-200;
-    border-top-color: $color-primary;
-  }
+    .spinner--md & {
+      width: 12px;
+      height: 12px;
+    }
 
-  &--white {
-    border-color: rgba($color-white, 0.3);
-    border-top-color: $color-white;
+    .spinner--lg & {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:nth-child(1) { animation-delay: -0.32s; }
+    &:nth-child(2) { animation-delay: -0.16s; }
   }
 
   &__text {
-    @include body-small;
+    font-size: 0.875rem;
     color: $color-text-secondary;
+  }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% { 
+    transform: scale(1);
+    opacity: 1;
   }
 }

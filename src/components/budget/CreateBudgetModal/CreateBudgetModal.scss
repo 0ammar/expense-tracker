@@ -1,31 +1,20 @@
-.create-budget-modal {
-  @include flex-column;
-  gap: $spacing-xl;
+@import "variables";
 
-  &__error {
-    padding: $spacing-md;
-    background: rgba($color-danger, 0.1);
-    border: 1px solid $color-danger;
-    border-radius: $radius-md;
-    color: $color-danger;
-    @include body-small;
-    animation: slideInDown $transition-base ease-out;
-  }
+.create-budget-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
-  &__fields {
-    @include flex-column;
-    gap: $spacing-lg;
-  }
-
-  &__row {
+  .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: $spacing-md;
+    gap: 0.75rem;
   }
 
-  &__actions {
-    @include flex-center;
-    gap: $spacing-md;
+  .form-actions {
+    display: flex;
+    gap: 0.75rem;
     justify-content: flex-end;
+    margin-top: 0.5rem;
   }
 }

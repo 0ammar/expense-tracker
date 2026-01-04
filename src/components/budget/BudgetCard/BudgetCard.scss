@@ -1,93 +1,99 @@
+@import "variables";
+@import "mixins";
+
 .budget-card {
-  @include flex-column;
-  gap: $spacing-lg;
-  animation: slideInUp $transition-base ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
 
   &__header {
-    @include flex-between;
-    gap: $spacing-md;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      font-size: 1rem;
+      font-weight: $font-weight-semibold;
+      margin: 0;
+      color: $color-text-primary;
+    }
   }
 
-  &__title {
-    @include heading-4;
-    margin: 0;
-  }
-
-  &__count {
-    @include caption;
+  &__badge {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
     color: $color-text-tertiary;
     background: $color-neutral-100;
-    padding: $spacing-xs $spacing-sm;
-    border-radius: $radius-md;
+    padding: 0.25rem 0.5rem;
+    border-radius: $radius-sm;
+
+    span {
+      line-height: 1;
+    }
   }
 
   &__balance {
-    @include flex-column;
-    gap: $spacing-xs;
-    padding: $spacing-lg;
-    background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
-    border-radius: $radius-lg;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+    border-radius: $radius-md;
     color: $color-white;
-  }
 
-  &__balance-label {
-    @include caption;
-    color: rgba($color-white, 0.8);
-  }
-
-  &__balance-amount {
-    @include heading-2;
-    
-    &.positive {
-      color: $color-white;
+    span {
+      font-size: 0.7rem;
+      opacity: 0.9;
+      display: block;
+      margin-bottom: 0.25rem;
     }
 
-    &.negative {
-      color: rgba($color-danger-light, 1);
+    h2 {
+      font-size: 1.25rem;
+      font-weight: $font-weight-bold;
+      margin: 0;
+
+      &.negative {
+        opacity: 0.85;
+      }
     }
   }
 
   &__stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: $spacing-md;
-  }
+    gap: 0.625rem;
 
-  &__stat {
-    @include flex-center;
-    gap: $spacing-sm;
-    padding: $spacing-md;
-    background: $color-neutral-50;
-    border-radius: $radius-md;
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem;
+      background: $color-neutral-50;
+      border-radius: $radius-sm;
 
-    &--income {
-      border-left: 3px solid $color-success;
+      .icon-success {
+        color: $color-success;
+      }
+
+      .icon-danger {
+        color: $color-danger;
+      }
+
+      span {
+        font-size: 0.7rem;
+        color: $color-text-tertiary;
+        display: block;
+        margin-bottom: 0.125rem;
+      }
+
+      strong {
+        font-size: 0.8rem;
+        color: $color-text-primary;
+        font-weight: $font-weight-semibold;
+      }
     }
-
-    &--expense {
-      border-left: 3px solid $color-danger;
-    }
-  }
-
-  &__stat-icon {
-    font-size: $font-size-2xl;
-    line-height: 1;
-  }
-
-  &__stat-content {
-    @include flex-column;
-    gap: $spacing-xs;
-    flex: 1;
-  }
-
-  &__stat-label {
-    @include caption;
-    color: $color-text-tertiary;
-  }
-
-  &__stat-value {
-    @include body-base;
-    font-weight: $font-weight-semibold;
-    color: $color-text-primary;
   }
 }

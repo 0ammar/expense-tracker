@@ -1,91 +1,75 @@
+@import "variables";
+
 .transaction-item {
-  @include flex-center;
-  gap: $spacing-md;
-  padding: $spacing-lg;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
   background: $color-surface;
-  border-radius: $radius-lg;
-  border: 1px solid $color-border-primary;
-  transition: all $transition-base;
-  animation: slideInUp $transition-base ease-out;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+  gap: 0.75rem;
 
-  &:hover {
-    box-shadow: $shadow-md;
-    border-color: $color-border-secondary;
-  }
-
-  &--income {
-    border-left: 4px solid $color-success;
-  }
-
-  &--expense {
-    border-left: 4px solid $color-danger;
-  }
-
-  &__icon {
-    @include flex-center;
-    width: 48px;
-    height: 48px;
-    background: $color-neutral-50;
-    border-radius: $radius-md;
-    font-size: $font-size-2xl;
-    flex-shrink: 0;
-  }
-
-  &__content {
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
     flex: 1;
-    @include flex-column;
-    gap: $spacing-xs;
     min-width: 0;
   }
 
-  &__main {
-    @include flex-column;
-    gap: $spacing-xs;
+  &__icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-sm;
+    flex-shrink: 0;
+
+    &--income {
+      background: rgba($color-success, 0.1);
+      color: $color-success;
+    }
+
+    &--expense {
+      background: rgba($color-danger, 0.1);
+      color: $color-danger;
+    }
+  }
+
+  &__details {
+    flex: 1;
+    min-width: 0;
   }
 
   &__name {
-    @include body-base;
-    font-weight: $font-weight-semibold;
+    font-size: 0.875rem;
+    font-weight: $font-weight-medium;
+    margin: 0 0 0.125rem;
     color: $color-text-primary;
-    margin: 0;
-    @include truncate;
-  }
-
-  &__description {
-    @include body-small;
-    color: $color-text-secondary;
-    margin: 0;
-    @include line-clamp(2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__meta {
-    @include flex-center;
-    gap: $spacing-md;
-    flex-wrap: wrap;
-  }
-
-  &__category {
-    @include caption;
-    background: $color-neutral-100;
-    padding: $spacing-xs $spacing-sm;
-    border-radius: $radius-sm;
-  }
-
-  &__date {
-    @include caption;
+    font-size: 0.75rem;
     color: $color-text-tertiary;
+    margin: 0;
   }
 
   &__right {
-    @include flex-column;
-    align-items: flex-end;
-    gap: $spacing-sm;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
   }
 
   &__amount {
-    @include heading-4;
+    font-size: 0.875rem;
+    font-weight: $font-weight-semibold;
     font-variant-numeric: tabular-nums;
-    margin: 0;
 
     &--income {
       color: $color-success;
@@ -97,41 +81,26 @@
   }
 
   &__actions {
-    @include flex-center;
-    gap: $spacing-xs;
+    display: flex;
+    gap: 0.25rem;
   }
 
   &__action {
-    @include flex-center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent;
     border: none;
-    border-radius: $radius-md;
+    border-radius: $radius-sm;
+    color: $color-text-secondary;
     cursor: pointer;
-    transition: all $transition-fast;
-    font-size: $font-size-base;
+    transition: all 0.2s;
 
     &:hover {
       background: $color-neutral-100;
-      transform: scale(1.1);
-    }
-
-    &--delete:hover {
-      background: rgba($color-danger, 0.1);
-    }
-  }
-
-  @include respond-to(md) {
-    &__content {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    &__meta {
-      flex-wrap: nowrap;
+      color: $color-text-primary;
     }
   }
 }

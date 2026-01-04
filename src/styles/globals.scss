@@ -1,22 +1,26 @@
 @import "variables";
 @import "mixins";
 @import "effects";
-// GOOGLE FONTS
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap");
-// RESET & BASE STYLES
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
 }
 
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -25,10 +29,12 @@ body {
   font-weight: $font-weight-normal;
   line-height: $line-height-normal;
   color: $color-text-primary;
-  background: $color-bg-secondary;
   min-height: 100vh;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
-// TYPOGRAPHY
+
 h1,
 h2,
 h3,
@@ -44,19 +50,15 @@ h6 {
 h1 {
   @include heading-1;
 }
-
 h2 {
   @include heading-2;
 }
-
 h3 {
   @include heading-3;
 }
-
 h4 {
   @include heading-4;
 }
-
 p {
   margin: 0;
 }
@@ -65,72 +67,144 @@ a {
   color: $color-primary;
   text-decoration: none;
   transition: color $transition-fast;
-
   &:hover {
     color: $color-primary-dark;
   }
 }
-// FORM ELEMENTS
+
 button {
   font-family: inherit;
   cursor: pointer;
 }
-
 input,
 textarea,
 select {
   font-family: inherit;
   font-size: inherit;
 }
-// SCROLLBAR
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+
+.container {
+  @include container;
 }
 
-::-webkit-scrollbar-track {
-  background: $color-neutral-100;
-}
+.page-section {
+  padding: 2rem 0;
 
-::-webkit-scrollbar-thumb {
-  background: $color-neutral-300;
-  border-radius: $radius-full;
-
-  &:hover {
-    background: $color-neutral-400;
+  @media (max-width: 768px) {
+    padding: 1.5rem 0;
   }
 }
-// UTILITY CLASSES
-.container {
-  width: 100%;
-  max-width: $container-max-width;
-  margin: 0 auto;
-  padding: 0 $container-padding;
-}
 
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-left {
-  text-align: left;
-}
-
-.sr-only {
-  @include visually-hidden;
-}
-// LAYOUT
-.page-wrapper {
-  min-height: 100vh;
+.page-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+
+    @media (max-width: 768px) {
+      button {
+        flex: 1;
+      }
+    }
+  }
 }
 
-.main-content {
-  flex: 1;
-  padding: $spacing-xl 0;
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    @media (max-width: 768px) {
+      font-size: 1.25rem;
+    }
+  }
 }
+
+// 4 CARDS PER ROW
+.budget-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin: 2rem 0;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: $color-text-secondary;
+}
+
+.auth-page {
+  @include flex-column-center;
+  min-height: 95vh;
+}
+
+.dashboard-layout {
+  min-height: 100vh;
+  background: $color-bg-secondary;
+
+  &__main {
+    min-height: calc(100vh - #{$header-height});
+  }
+}
+

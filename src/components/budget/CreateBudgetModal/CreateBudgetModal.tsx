@@ -1,12 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/shared/Modal/Modal';
-import { Input } from '@/components/shared/Input/Input';
-import { Select } from '@/components/shared/Select/Select';
-import { Button } from '@/components/shared/Button/Button';
+import { Modal, Input, Select, Button } from '@/components';
 import { Budget } from '@/types/budget.types';
-import { validateBudgetForm, getMonthOptions, getYearOptions } from './CreateBudgetModal.logic';
+import { getMonthOptions, getYearOptions } from './CreateBudgetModal.logic';
 import './CreateBudgetModal.scss';
 
 interface CreateBudgetModalProps {
@@ -15,137 +12,74 @@ interface CreateBudgetModalProps {
   onSubmit: (data: { name: string; year: number; month: number }) => Promise<Budget | null>;
 }
 
-export const CreateBudgetModal: React.FC<CreateBudgetModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-}) => {
-  const currentDate = new Date();
-  const [formData, setFormData] = useState({
+export const CreateBudgetModal: React.FC<CreateBudgetModalProps> = ({ isOpen, onClose, onSubmit }) => {
+  const now = new Date();
+  const [form, setForm] = useState({
     name: '',
-    month: currentDate.getMonth() + 1,
-    year: currentDate.getFullYear(),
+    month: now.getMonth() + 1,
+    year: now.getFullYear(),
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    console.log('[CreateBudgetModal] Field changed:', name, value);
-    
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === 'name' ? value : parseInt(value, 10),
-    }));
-
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
+    setForm(prev => ({ ...prev, [name]: name === 'name' ? value : parseInt(value, 10) }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('[CreateBudgetModal] Submitting form:', formData);
-
-    const validationErrors = validateBudgetForm(formData);
-    if (Object.keys(validationErrors).length > 0) {
-      console.log('[CreateBudgetModal] Validation errors:', validationErrors);
-      setErrors(validationErrors);
-      return;
-    }
-
     setLoading(true);
-
     try {
-      await onSubmit(formData);
-      console.log('[CreateBudgetModal] Budget created successfully');
-      
-      setFormData({
-        name: '',
-        month: currentDate.getMonth() + 1,
-        year: currentDate.getFullYear(),
-      });
-      setErrors({});
+      await onSubmit(form);
+      setForm({ name: '', month: now.getMonth() + 1, year: now.getFullYear() });
       onClose();
-    } catch (error) {
-      console.error('[CreateBudgetModal] Error creating budget:', error);
-      setErrors({ general: 'Failed to create budget. Please try again.' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create New Budget" size="md">
-      <form onSubmit={handleSubmit} className="create-budget-modal">
-        {errors.general && (
-          <div className="create-budget-modal__error" role="alert">
-            {errors.general}
-          </div>
-        )}
+    <Modal isOpen={isOpen} onClose={onClose} title="Create Budget" size="md">
+      <form onSubmit={handleSubmit} className="create-budget-form">
+        <Input
+          name="name"
+          label="Budget Name"
+          value={form.name}
+          onChange={handleChange}
+          disabled={loading}
+          fullWidth
+          required
+        />
 
-        <div className="create-budget-modal__fields">
-          <Input
-            type="text"
-            name="name"
-            id="budget-name"
-            label="Budget Name"
-            placeholder="e.g., January 2026"
-            value={formData.name}
+        <div className="form-row">
+          <Select
+            name="month"
+            label="Month"
+            options={getMonthOptions()}
+            value={form.month.toString()}
             onChange={handleChange}
-            error={errors.name}
             disabled={loading}
             fullWidth
             required
           />
-
-          <div className="create-budget-modal__row">
-            <Select
-              name="month"
-              id="budget-month"
-              label="Month"
-              options={getMonthOptions()}
-              value={formData.month.toString()}
-              onChange={handleChange}
-              error={errors.month}
-              disabled={loading}
-              fullWidth
-              required
-            />
-
-            <Select
-              name="year"
-              id="budget-year"
-              label="Year"
-              options={getYearOptions()}
-              value={formData.year.toString()}
-              onChange={handleChange}
-              error={errors.year}
-              disabled={loading}
-              fullWidth
-              required
-            />
-          </div>
+          <Select
+            name="year"
+            label="Year"
+            options={getYearOptions()}
+            value={form.year.toString()}
+            onChange={handleChange}
+            disabled={loading}
+            fullWidth
+            required
+          />
         </div>
 
-        <div className="create-budget-modal__actions">
-          <Button
-            type="button"
-            title="Cancel"
-            variant="secondary"
-            onClick={onClose}
-            disabled={loading}
-          >
+        <div className="form-actions">
+          <Button variant="secondary" onClick={onClose} disabled={loading}>
             Cancel
           </Button>
-          <Button
-            type="submit"
-            title="Create budget"
-            variant="primary"
-            loading={loading}
-            disabled={loading}
-          >
-            Create Budget
+          <Button type="submit" variant="primary" loading={loading}>
+            Create
           </Button>
         </div>
       </form>

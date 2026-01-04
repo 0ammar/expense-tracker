@@ -3,30 +3,16 @@ import './Card.scss';
 
 interface CardProps {
   children: React.ReactNode;
-  variant?: 'default' | 'interactive' | 'bordered';
-  padding?: 'none' | 'sm' | 'md' | 'lg';
-  className?: string;
+  variant?: 'default' | 'interactive';
   onClick?: () => void;
+  className?: string;
 }
 
-export const Card: React.FC<CardProps> = ({
-  children,
-  variant = 'default',
-  padding = 'md',
-  className = '',
-  onClick,
-}) => {
-  const handleClick = () => {
-    if (onClick) {
-      console.log('[Card] Clicked');
-      onClick();
-    }
-  };
-
+export const Card: React.FC<CardProps> = ({ children, variant = 'default', onClick, className = '' }) => {
   return (
     <div
-      className={`card card--${variant} card--padding-${padding} ${className}`}
-      onClick={handleClick}
+      className={`card card--${variant} ${className}`}
+      onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >

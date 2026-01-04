@@ -1,41 +1,21 @@
+@import "variables";
+
 .transaction-list {
-  @include flex-column;
-  gap: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
-  &--empty {
-    @include flex-column-center;
-    padding: $spacing-4xl;
-    background: $color-surface;
-    border-radius: $radius-lg;
-    border: 2px dashed $color-border-primary;
-  }
+.transaction-list-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: $color-text-secondary;
+  background: $color-surface;
+  border-radius: $radius-md;
+  border: 2px dashed $color-border-primary;
 
-  &__empty-message {
-    @include heading-4;
-    color: $color-text-primary;
+  p {
     margin: 0;
-  }
-
-  &__empty-subtitle {
-    @include body-base;
-    color: $color-text-secondary;
-    margin: 0;
-  }
-
-  &__header {
-    @include flex-between;
-  }
-
-  &__count {
-    @include body-small;
-    font-weight: $font-weight-semibold;
-    color: $color-text-secondary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  &__items {
-    @include flex-column;
-    gap: $spacing-sm;
+    font-size: 0.875rem;
   }
 }

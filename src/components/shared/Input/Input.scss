@@ -1,7 +1,13 @@
+@import "variables";
+@import "mixins";
+@import "effects";
+
 .input-wrapper {
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+  width: 100%;
+  box-sizing: border-box;
 
   &--full {
     width: 100%;
@@ -28,6 +34,8 @@
 
 .input {
   @include input-base;
+  width: 100%;
+  box-sizing: border-box;
 
   &--error {
     border-color: $color-danger;
