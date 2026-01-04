@@ -13,12 +13,12 @@ interface AddTransactionModalProps {
   budgetId: string;
   onSubmit: (data: {
     budgetId: string;
-    name: string;
+    name?: string;
     amount: number;
     description?: string;
-    date: Date;
-    category: string;
-    type: TransactionType;
+    date?: Date;
+    category?: string;
+    type?: TransactionType;
   }) => Promise<Transaction | null>;
 }
 
@@ -56,12 +56,19 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
     }
     setLoading(true);
     try {
-      await onSubmit({
-        ...formData,
+      const submitData: any = {
         budgetId,
         amount: parseFloat(formData.amount),
-        date: new Date(formData.date),
-      });
+      };
+
+      if (formData.name) submitData.name = formData.name;
+      if (formData.description) submitData.description = formData.description;
+      if (formData.date) submitData.date = new Date(formData.date);
+      if (formData.category) submitData.category = formData.category;
+      if (formData.type) submitData.type = formData.type;
+
+      await onSubmit(submitData);
+      
       setFormData({
         name: '',
         amount: '',
@@ -90,7 +97,6 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             value={formData.type}
             onChange={handleTypeChange}
             fullWidth
-            required
           />
           <Input
             type="text"
@@ -101,7 +107,6 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             onChange={handleChange}
             error={errors.name}
             fullWidth
-            required
           />
           
           <div className="add-transaction-modal__row">
@@ -125,7 +130,6 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
               onChange={handleChange}
               error={errors.date}
               fullWidth
-              required
             />
           </div>
 
@@ -140,7 +144,6 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             onChange={handleChange}
             error={errors.category}
             fullWidth
-            required
           />
 
           <div className="add-transaction-modal__textarea-wrapper">
