@@ -36,15 +36,36 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    console.log('[API] Received transaction data:', body);
+
     const { budgetId, name, amount, description, date, category, type } = body;
 
+    if (!budgetId) {
+      return NextResponse.json({ error: 'Budget ID is required' }, { status: 400 });
+    }
+
+    if (!amount || isNaN(parseFloat(amount))) {
+      return NextResponse.json({ error: 'Valid amount is required' }, { status: 400 });
+    }
+
     const transaction = await prisma.transaction.create({
-      data: { budgetId, name, amount, description, date: new Date(date), category, type },
+      data: {
+        budgetId,
+        name: name || 'Untitled Transaction',
+        amount: parseFloat(amount),
+        description: description || null,
+        date: date ? new Date(date) : new Date(),
+        category: category || 'Uncategorized',
+        type: type || 'EXPENSE',
+      },
     });
 
     return NextResponse.json({ transaction }, { status: 201 });
   } catch (error) {
     console.error('[API] Error creating transaction:', error);
+    if (error instanceof Error) {
+      console.error('[API] Error details:', error.message);
+    }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
