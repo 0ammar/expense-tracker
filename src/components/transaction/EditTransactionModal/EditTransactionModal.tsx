@@ -36,14 +36,14 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
   useEffect(() => {
     if (transaction) {
       setFormData({
-        name: transaction.name ?? '', // Handle undefined
-        amount: transaction.amount?.toString() ?? '', // Handle undefined
+        name: transaction.name ?? '',
+        amount: transaction.amount?.toString() ?? '',
         description: transaction.description ?? '',
         date: transaction.date
           ? new Date(transaction.date).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0], // Default to today
+          : new Date().toISOString().split('T')[0],
         category: transaction.category ?? '',
-        type: transaction.type ?? TransactionType.EXPENSE, // Default type
+        type: transaction.type ?? TransactionType.EXPENSE,
       });
     }
   }, [transaction]);
@@ -66,11 +66,23 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
     }
     setLoading(true);
     try {
-      await onSubmit(transaction.id, {
-        ...formData,
-        amount: parseFloat(formData.amount),
-        date: new Date(formData.date),
-      });
+      const submitData: {
+        amount?: number;
+        name?: string;
+        description?: string;
+        date?: Date;
+        category?: string;
+        type?: TransactionType;
+      } = {};
+
+      if (formData.amount) submitData.amount = parseFloat(formData.amount);
+      if (formData.name) submitData.name = formData.name;
+      if (formData.description) submitData.description = formData.description;
+      if (formData.date) submitData.date = new Date(formData.date);
+      if (formData.category) submitData.category = formData.category;
+      if (formData.type) submitData.type = formData.type;
+
+      await onSubmit(transaction.id, submitData);
       onClose();
     } finally {
       setLoading(false);
@@ -91,7 +103,6 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
             onChange={handleChange}
             error={errors.name}
             fullWidth
-            required
           />
 
           <div className="edit-transaction-modal__row">
@@ -114,7 +125,6 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
               onChange={handleChange}
               error={errors.date}
               fullWidth
-              required
             />
           </div>
 
@@ -129,7 +139,6 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
             onChange={handleChange}
             error={errors.category}
             fullWidth
-            required
           />
 
           <div className="edit-transaction-modal__textarea-wrapper">

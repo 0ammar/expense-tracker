@@ -56,7 +56,15 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
     }
     setLoading(true);
     try {
-      const submitData: any = {
+      const submitData: {
+        budgetId: string;
+        amount: number;
+        name?: string;
+        description?: string;
+        date?: Date;
+        category?: string;
+        type?: TransactionType;
+      } = {
         budgetId,
         amount: parseFloat(formData.amount),
       };

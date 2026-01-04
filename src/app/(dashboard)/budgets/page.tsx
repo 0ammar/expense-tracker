@@ -2,12 +2,14 @@
 
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useBudgets } from '@/hooks/useBudgets';
 import { BudgetCard, CreateBudgetModal, EditBudgetModal, Button, LoadingSpinner } from '@/components';
 import styles from './page.module.scss';
 import { Budget } from '@/types/budget.types';
 
 export default function BudgetsPage() {
+  const { data: session } = useSession();
   const { budgets, loading, createBudget, updateBudget } = useBudgets(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -27,6 +29,12 @@ export default function BudgetsPage() {
 
   return (
     <div className={styles.budgetsPage}>
+      {session?.user?.name && (
+        <div className={styles.welcome}>
+          <p>Welcome back, <strong>{session.user.name}</strong></p>
+        </div>
+      )}
+      
       <div className={styles.header}>
         <h1>My Budgets</h1>
         <Button
