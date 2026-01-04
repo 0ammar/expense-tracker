@@ -36,12 +36,14 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
   useEffect(() => {
     if (transaction) {
       setFormData({
-        name: transaction.name,
-        amount: transaction.amount.toString(),
-        description: transaction.description || '',
-        date: new Date(transaction.date).toISOString().split('T')[0],
-        category: transaction.category,
-        type: transaction.type,
+        name: transaction.name ?? '', // Handle undefined
+        amount: transaction.amount?.toString() ?? '', // Handle undefined
+        description: transaction.description ?? '',
+        date: transaction.date
+          ? new Date(transaction.date).toISOString().split('T')[0]
+          : new Date().toISOString().split('T')[0], // Default to today
+        category: transaction.category ?? '',
+        type: transaction.type ?? TransactionType.EXPENSE, // Default type
       });
     }
   }, [transaction]);
@@ -81,38 +83,38 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Transaction" size="md">
       <form onSubmit={handleSubmit} className="edit-transaction-modal">
         <div className="edit-transaction-modal__fields">
-          <Input 
-            type="text" 
-            name="name" 
-            label="Name" 
-            value={formData.name} 
-            onChange={handleChange} 
-            error={errors.name} 
-            fullWidth 
-            required 
+          <Input
+            type="text"
+            name="name"
+            label="Name"
+            value={formData.name}
+            onChange={handleChange}
+            error={errors.name}
+            fullWidth
+            required
           />
-          
+
           <div className="edit-transaction-modal__row">
-            <Input 
-              type="number" 
-              name="amount" 
-              label="Amount (JOD)" 
-              step="0.001" 
-              value={formData.amount} 
-              onChange={handleChange} 
-              error={errors.amount} 
-              fullWidth 
-              required 
+            <Input
+              type="number"
+              name="amount"
+              label="Amount (JOD)"
+              step="0.001"
+              value={formData.amount}
+              onChange={handleChange}
+              error={errors.amount}
+              fullWidth
+              required
             />
-            <Input 
-              type="date" 
-              name="date" 
-              label="Date" 
-              value={formData.date} 
-              onChange={handleChange} 
-              error={errors.date} 
-              fullWidth 
-              required 
+            <Input
+              type="date"
+              name="date"
+              label="Date"
+              value={formData.date}
+              onChange={handleChange}
+              error={errors.date}
+              fullWidth
+              required
             />
           </div>
 
@@ -120,7 +122,7 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
             name="category"
             label="Category"
             options={[
-              { value: '', label: 'Select category' }, 
+              { value: '', label: 'Select category' },
               ...categories.map((cat) => ({ value: cat.value, label: cat.label }))
             ]}
             value={formData.category}
@@ -132,13 +134,13 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ isOp
 
           <div className="edit-transaction-modal__textarea-wrapper">
             <label htmlFor="description" className="edit-transaction-modal__label">Description (Optional)</label>
-            <textarea 
-              name="description" 
-              id="description" 
-              value={formData.description} 
-              onChange={handleChange} 
-              className="edit-transaction-modal__textarea" 
-              rows={3} 
+            <textarea
+              name="description"
+              id="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="edit-transaction-modal__textarea"
+              rows={3}
             />
           </div>
         </div>
